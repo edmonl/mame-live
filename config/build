@@ -2,7 +2,7 @@
 Architecture: amd64
 Archive-Areas: main
 Distribution: testing
-Mirror-Bootstrap: http://ftp.debian.org/debian/
+Mirror-Bootstrap: http://debian.mirror.rafal.ca/debian/
 
 [FIXME]
 Configuration-Version: 1:20170213
