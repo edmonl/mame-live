@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+lb config noauto \
+  --system live \
+  --binary-images hdd \
+  --distribution testing \
+  --archive-areas main \
+  --architectures amd64 \
+  --apt-indices false \
+  --apt-recommends false \
+  --debootstrap-options '--variant=minbase' \
+  --firmware-chroot false \
+  --memtest none \
+	"${@}"
