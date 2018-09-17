@@ -3,14 +3,24 @@
 set -e
 
 lb config noauto \
+  --iso-volume mame-live \
+  --tasksel apt \
   --system live \
-  --binary-images hdd \
+  --binary-images iso-hybrid \
   --distribution testing \
   --archive-areas main \
   --architectures amd64 \
-  --apt-indices false \
-  --apt-recommends false \
-  --debootstrap-options '--variant=minbase' \
-  --firmware-chroot false \
+  --security false \
+  --updates false \
+  --backports false \
   --memtest none \
-	"${@}"
+  --win32-loader false \
+  --bootloaders grub-efi \
+  --debootstrap-options '--variant=minbase --exclude=hostname,tzdata' \
+  --bootappend-live 'boot=live components quiet nosplash' \
+  "${@}"
+
+  #--apt-indices false \
+  #--apt-recommends false \
+  #--firmware-chroot false \
+  #--debootstrap-options '--variant=minbase --exclude=sed,mawk,sysvinit-utils,python3' \
