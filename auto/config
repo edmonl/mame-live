@@ -32,6 +32,7 @@ lb config noauto \
 
 if [ -n "$DEV" ]; then
   ln -rs auto/dev-tools.list.chroot config/package-lists/_dev-tools.list.chroot
+  mkdir -p config/includes.chroot/etc/sudoers.d/
   echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > config/includes.chroot/etc/sudoers.d/mame-live
   chmod 0440 config/includes.chroot/etc/sudoers.d/mame-live
 else
