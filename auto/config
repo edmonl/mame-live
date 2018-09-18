@@ -32,9 +32,9 @@ lb config noauto \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
   --bootappend-live "boot=live quiet nosplash components$TZ$KB" \
-  --apt-recommends false \
   "${@}"
 
+  #--apt-recommends false \
   #--apt-indices false \
   #--firmware-chroot false \
   #todo: components
