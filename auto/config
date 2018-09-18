@@ -23,6 +23,7 @@ lb config noauto \
   --distribution testing \
   --archive-areas main \
   --architectures amd64 \
+  --debian-installer false \
   --security false \
   --updates false \
   --backports false \
