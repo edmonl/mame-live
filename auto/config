@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
+if [ -e /etc/timezone ]; then
+  TZ=" timezone=$(cat /etc/timezone)"
+fi
+
 lb config noauto \
   --iso-volume mame-live \
   --tasksel apt \
@@ -16,7 +20,7 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live 'boot=live quiet nosplash components' \
+  --bootappend-live "boot=live quiet nosplash components$TZ" \
   --apt-recommends false \
   "${@}"
 
