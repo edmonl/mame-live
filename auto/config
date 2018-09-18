@@ -5,6 +5,16 @@ if [ -e /etc/timezone ]; then
   TZ=" timezone=$(cat /etc/timezone)"
 fi
 
+if [ -e /etc/default/keyboard ]; then
+  KB=" $(
+    . /etc/default/keyboard
+    echo "${XKBLAYOUT:+keyboard-layouts=$XKBLAYOUT}"
+    echo "${XKBMODEL:+keyboard-model=$XKBMODEL}"
+    echo "${XKBOPTIONS:+keyboard-options=$XKBOPTIONS}"
+    echo "${XKBVARIANT:+keyboard-variants=$XKBVARIANT}"
+  )"
+fi
+
 lb config noauto \
   --iso-volume mame-live \
   --tasksel apt \
@@ -20,7 +30,7 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live "boot=live quiet nosplash components$TZ" \
+  --bootappend-live "boot=live quiet nosplash components$TZ$KB" \
   --apt-recommends false \
   "${@}"
 
