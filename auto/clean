@@ -1,8 +1,8 @@
 #!/bin/sh
-
 set -e
 
 lb clean noauto "${@}"
 
+rm -f config/package-lists/_dev-tools.list.chroot config/hooks/normal/9975-_apt-minimal.hook.chroot config/hooks/normal/9985-_dpkg-minimal.hook.chroot
 rm -f config/binary config/bootstrap config/chroot config/common config/source
 rm -f build.log

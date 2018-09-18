@@ -1,5 +1,4 @@
 #!/bin/sh
-
 set -e
 
 lb config noauto \
@@ -16,11 +15,18 @@ lb config noauto \
   --memtest none \
   --win32-loader false \
   --bootloaders grub-efi \
-  --debootstrap-options '--variant=minbase --exclude=hostname,tzdata' \
-  --bootappend-live 'boot=live components quiet nosplash' \
+  --debootstrap-options '--variant=minbase' \
+  --bootappend-live 'boot=live quiet nosplash components' \
+  --apt-recommends false \
   "${@}"
 
   #--apt-indices false \
-  #--apt-recommends false \
   #--firmware-chroot false \
-  #--debootstrap-options '--variant=minbase --exclude=sed,mawk,sysvinit-utils,python3' \
+  #todo: components
+
+if [ -n "$DEV" ]; then
+  ln -s auto/dev-tools.list.chroot config/package-lists/_dev-tools.list.chroot
+else
+  ln -s auto/apt-minimal.hook.chroot config/hooks/normal/9975-_apt-minimal.hook.chroot
+  ln -s auto/dpkg-minimal.hook.chroot config/hooks/normal/9985-_dpkg-minimal.hook.chroot
+fi

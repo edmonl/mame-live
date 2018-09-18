@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+for PACKAGE in hostname tzdata
+do
+  if ! apt-get purge --yes --allow-remove-essential "${PACKAGE}"
+  then
+    echo "WARNING: ${PACKAGE} isn't installed"
+  fi
+done
+
+apt-get autoremove --yes --purge || true
+for PACKAGE in $(dpkg --get-selections | grep '\bdeinstall\b' | cut -f1); do
+  if ! apt-get purge --yes --allow-remove-essential "${PACKAGE}"
+  then
+    echo "WARNING: ${PACKAGE} isn't installed"
+  fi
+done

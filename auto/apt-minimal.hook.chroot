@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+for PACKAGE in rsync sysvinit-utils
+do
+  if ! apt-get purge --yes --allow-remove-essential "${PACKAGE}"
+  then
+    echo "WARNING: ${PACKAGE} isn't installed"
+  fi
+done

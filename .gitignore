@@ -19,8 +19,11 @@ config/bootstrap
 config/chroot
 config/common
 config/source
-
 config/control
+
+config/build
+config/package-lists/_*
+config/hooks/*/????-_*
 
 source/
 source*.iso
