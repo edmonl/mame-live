@@ -22,8 +22,10 @@ config/source
 config/control
 
 config/build
-config/package-lists/_*
-config/hooks/*/????-_*
+config/package-lists/*
+config/hooks/live/*
+config/hooks/normal/*
+!config/**/*.mame-live.*
 
 source/
 source*.iso
