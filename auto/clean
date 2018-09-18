@@ -6,5 +6,6 @@ lb clean noauto "${@}"
 rm -f config/binary config/bootstrap config/chroot config/common config/source
 rm -f build.log
 
-rm -f config/includes.chroot/etc/sudoers.d/mame-live
+find -P config -name '*.auto-mame-live' -exec rm -f '{}' '+'
+find -P config -name '*.auto-mame-live.*' -exec rm -f '{}' '+'
 find -P config -type l -exec rm -f '{}' '+'

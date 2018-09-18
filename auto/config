@@ -22,7 +22,7 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live "boot=live quiet nosplash components=hostname,user-setup,locales,tzdata,util-linux,login username=$USERNAME $TZ" \
+  --bootappend-live "boot=live quiet nosplash noeject components=hostname,user-setup,locales,tzdata,util-linux,login username=$USERNAME $TZ" \
   "${@}"
 
   #--apt-recommends false \
@@ -31,11 +31,11 @@ lb config noauto \
   #todo: components
 
 if [ -n "$DEV" ]; then
-  ln -rs auto/dev-tools.list.chroot config/package-lists/_dev-tools.list.chroot
+  ln -rs auto/dev-tools.list.chroot config/package-lists/dev-tools.auto-mame-live.list.chroot
   mkdir -p config/includes.chroot/etc/sudoers.d/
-  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > config/includes.chroot/etc/sudoers.d/mame-live
-  chmod 0440 config/includes.chroot/etc/sudoers.d/mame-live
+  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > config/includes.chroot/etc/sudoers.d/nopwd.auto-mame-live
+  chmod 0440 config/includes.chroot/etc/sudoers.d/nopwd.auto-mame-live
 else
-  ln -rs auto/apt-minimal.hook.chroot config/hooks/normal/9975-_apt-minimal.hook.chroot
-  ln -rs auto/dpkg-minimal.hook.chroot config/hooks/normal/9985-_dpkg-minimal.hook.chroot
+  ln -rs auto/apt-minimal.hook.chroot config/hooks/normal/9975-apt-minimal.auto-mame-live.hook.chroot
+  ln -rs auto/dpkg-minimal.hook.chroot config/hooks/normal/9985-dpkg-minimal.auto-mame-live.hook.chroot
 fi
