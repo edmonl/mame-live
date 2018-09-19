@@ -4,7 +4,10 @@ set -e
 if [ -e /etc/timezone ]; then
   readonly TZ="timezone=$(cat /etc/timezone)"
 fi
-readonly LOCALE="${LANG:+locales=$LANG}"
+LOCALE="${LC_ALL:+locales=$LC_ALL}"
+if [ -z "$LOCALE" ]; then
+  LOCALE="${LANG:+locales=$LANG}"
+fi
 
 readonly USERNAME=user
 readonly USER_FULLNAME='M.A.M.E Live user'
@@ -31,7 +34,6 @@ lb config noauto \
   #--apt-recommends false \
   #--apt-indices false \
   #--firmware-chroot false \
-  #todo: components
 
 if [ -n "$DEV" ]; then
   ln -rs auto/dev-tools.list.chroot config/package-lists/dev-tools.auto-mame-live.list.chroot
@@ -48,5 +50,8 @@ else
 fi
 
 mkdir -p config/includes.chroot/etc/live/live.conf.d/
-echo "LIVE_USERNAME=$USERNAME" > config/includes.chroot/etc/live/live.conf.d/user.auto-mame-live.conf
-echo "LIVE_USER_FULLNAME=$USER_FULLNAME" >> config/includes.chroot/etc/live/live.conf.d/user.auto-mame-live.conf
+cat > config/includes.chroot/etc/live/live.conf.d/user.auto-mame-live.conf << EOF
+LIVE_USERNAME="$USERNAME"
+LIVE_USER_FULLNAME="$USER_FULLNAME"
+LIVE_CONFIG_DEBUG=
+EOF

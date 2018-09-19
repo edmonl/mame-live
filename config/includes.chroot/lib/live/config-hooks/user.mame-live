@@ -16,4 +16,4 @@ for group in $(echo ${LIVE_USER_DEFAULT_GROUPS} | sed -e 's|,| |g'); do
   adduser "$USER" "$group" >/dev/null || true
 done
 
-usermod --password='*' root
+[ "$LIVE_CONFIG_DEBUG" = "true" ] || usermod --password='*' root
