@@ -2,9 +2,12 @@
 set -e
 
 if [ -e /etc/timezone ]; then
-  TZ="timezone=$(cat /etc/timezone)"
+  readonly TZ="timezone=$(cat /etc/timezone)"
 fi
+readonly LOCALE="${LANG:+locales=$LANG}"
+
 readonly USERNAME=user
+readonly USER_FULLNAME='M.A.M.E Live user'
 
 lb config noauto \
   --iso-volume mame-live \
@@ -22,7 +25,7 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live "boot=live quiet nosplash noeject components=hostname,user-setup,locales,tzdata,util-linux,login username=$USERNAME $TZ" \
+  --bootappend-live "boot=live quiet nosplash noeject components=hostname,locales,tzdata,util-linux $TZ $LOCALE" \
   "${@}"
 
   #--apt-recommends false \
@@ -32,10 +35,18 @@ lb config noauto \
 
 if [ -n "$DEV" ]; then
   ln -rs auto/dev-tools.list.chroot config/package-lists/dev-tools.auto-mame-live.list.chroot
+
   mkdir -p config/includes.chroot/etc/sudoers.d/
   echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > config/includes.chroot/etc/sudoers.d/nopwd.auto-mame-live
   chmod 0440 config/includes.chroot/etc/sudoers.d/nopwd.auto-mame-live
+
+  mkdir -p config/includes.chroot/etc/apt/apt.conf.d/
+  echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' > config/includes.chroot/etc/apt/apt.conf.d/00aptitude.auto-mame-live
 else
   ln -rs auto/apt-minimal.hook.chroot config/hooks/normal/9975-apt-minimal.auto-mame-live.hook.chroot
   ln -rs auto/dpkg-minimal.hook.chroot config/hooks/normal/9985-dpkg-minimal.auto-mame-live.hook.chroot
 fi
+
+mkdir -p config/includes.chroot/etc/live/live.conf.d/
+echo "LIVE_USERNAME=$USERNAME" > config/includes.chroot/etc/live/live.conf.d/user.auto-mame-live.conf
+echo "LIVE_USER_FULLNAME=$USER_FULLNAME" >> config/includes.chroot/etc/live/live.conf.d/user.auto-mame-live.conf

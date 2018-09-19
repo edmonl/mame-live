@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+readonly USER="${LIVE_USERNAME}"
+if [ -z "$USER" ] || grep -q "^${USER}:" /etc/passwd; then
+  exit 0
+fi
+readonly FULLNAME="${LIVE_USER_FULLNAME:?missing user full name}"
+
+adduser --disabled-password --gecos "$FULLNAME" --uid 1000 "$USER"
+usermod --password='U6aMy0wojraho' "$USER" # blank password
+if [ -d "/home/$USER" ]; then
+  chown "$USER:$USER" "/home/$USER" || true
+fi
+for group in $(echo ${LIVE_USER_DEFAULT_GROUPS} | sed -e 's|,| |g'); do
+  adduser "$USER" "$group" >/dev/null || true
+done
+
+usermod --password='*' root

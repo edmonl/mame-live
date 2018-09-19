@@ -1,10 +1,8 @@
 #!/bin/sh
 set -e
 
-for PACKAGE in rsync sudo sysvinit-utils
-do
-  if ! apt-get purge --yes --allow-remove-essential "${PACKAGE}"
-  then
+for PACKAGE in iproute2 rsync sudo sysvinit-utils; do
+  if ! apt-get purge --yes --allow-remove-essential "${PACKAGE}"; then
     echo "WARNING: ${PACKAGE} isn't installed"
   fi
 done
