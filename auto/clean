@@ -6,6 +6,4 @@ lb clean noauto "${@}"
 rm -f config/binary config/bootstrap config/chroot config/common config/source
 rm -f build.log
 
-find -P config -name '*.auto-mame-live' -exec rm -f '{}' '+'
-find -P config -name '*.auto-mame-live.*' -exec rm -f '{}' '+'
-find -P config -type l -exec rm -f '{}' '+'
+find -P config \( -name '*.auto-mame-live' -o -name '*.auto-mame-live.*' -o -type l \) -exec rm -f '{}' '+'

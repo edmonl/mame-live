@@ -1,17 +1,16 @@
 #!/bin/sh
 set -e
 
-if [ -e /etc/timezone ]; then
-  readonly TZ="timezone=$(cat /etc/timezone)"
-fi
-LOCALE="${LC_ALL:+locales=$LC_ALL}"
-if [ -z "$LOCALE" ]; then
-  LOCALE="${LANG:+locales=$LANG}"
-fi
+# Init
+TZ="${TZ:-$(cat /etc/timezone 2>/dev/null)}"
+TZ="${TZ:+timezone=$TZ}"
+LOCALE="${LOCALE:-$LC_ALL}"
+LOCALE="${LOCALE:-$LC_LANG}"
+LOCALE="${LOCALE:+locales=$LOCALE}"
+readonly USERNAME="${USERNAME:-user}"
+readonly USER_FULLNAME="${USER_FULLNAME:-M.A.M.E Live user}"
 
-readonly USERNAME=user
-readonly USER_FULLNAME='M.A.M.E Live user'
-
+# lb config
 lb config noauto \
   --iso-volume mame-live \
   --tasksel apt \
@@ -35,23 +34,54 @@ lb config noauto \
   #--apt-indices false \
   #--firmware-chroot false \
 
-if [ -n "$DEV" ]; then
-  ln -rs auto/dev-tools.list.chroot config/package-lists/dev-tools.auto-mame-live.list.chroot
+# Utils
+chroot_file() {
+  local path="${1:?missing chroot path}"
+  local mode="$2"
+  path="config/includes.chroot/${path#/}"
+  mkdir -p "$(dirname "$path")"
+  cat > "$path"
+  if [ -n "$mode" ]; then
+    chmod "$mode" "$path"
+  fi
+}
 
-  mkdir -p config/includes.chroot/etc/sudoers.d/
-  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > config/includes.chroot/etc/sudoers.d/nopwd.auto-mame-live
-  chmod 0440 config/includes.chroot/etc/sudoers.d/nopwd.auto-mame-live
+ln_hooks() {
+  local name="${1:?missing hook name}"
+  local type="${2:?missing hook type}"
+  local priority="${3:?missing hook priority}"
+  local dir="$4"
+  [ -n "$dir" ] && [ "$dir" != "/" ] && dir="${dir%/}/"
+  ln -rs "$dir$name.hook.$type" "config/hooks/normal/$priority-$name.auto-mame-live.hook.$type"
+}
 
-  mkdir -p config/includes.chroot/etc/apt/apt.conf.d/
-  echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' > config/includes.chroot/etc/apt/apt.conf.d/00aptitude.auto-mame-live
-else
-  ln -rs auto/apt-minimal.hook.chroot config/hooks/normal/9975-apt-minimal.auto-mame-live.hook.chroot
-  ln -rs auto/dpkg-minimal.hook.chroot config/hooks/normal/9985-dpkg-minimal.auto-mame-live.hook.chroot
-fi
+# Extra tasks
+extra_tools() {
+  cat > config/package-lists/extra-tools.auto-mame-live.list.chroot << EOF
+aptitude
+sudo
+EOF
+  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | chroot_file /etc/sudoers.d/nopwd.auto-mame-live 0440
+  echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' | chroot_file /etc/apt/apt.conf.d/00aptitude.auto-mame-live
+}
 
-mkdir -p config/includes.chroot/etc/live/live.conf.d/
-cat > config/includes.chroot/etc/live/live.conf.d/user.auto-mame-live.conf << EOF
+minimal_chroot_hooks() {
+  ln_hooks apt-minimal chroot 9975 auto
+  ln_hooks dpkg-minimal chroot 9985 auto
+}
+
+live_config_env() {
+  chroot_file /etc/live/config.conf.d/user.auto-mame-live.conf << EOF
 LIVE_USERNAME="$USERNAME"
 LIVE_USER_FULLNAME="$USER_FULLNAME"
 LIVE_CONFIG_DEBUG=
 EOF
+}
+
+# Main
+if [ -n "$MINIMAL" ]; then
+  minimal_chroot_hooks
+else
+  extra_tools
+fi
+live_config_env

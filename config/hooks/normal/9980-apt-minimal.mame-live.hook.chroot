@@ -2,16 +2,10 @@
 set -e
 
 for PACKAGE in keyboard-configuration user-setup; do
-  if ! apt-get purge --yes --allow-remove-essential "${PACKAGE}"
-  then
-    echo "WARNING: ${PACKAGE} isn't installed"
-  fi
+  apt-get purge --yes --allow-remove-essential "${PACKAGE}" || true
 done
 
 apt-get autoremove --yes --purge || true
 for PACKAGE in $(dpkg --get-selections | grep '\bdeinstall\b' | cut -f1); do
-  if ! apt-get purge --yes --allow-remove-essential "${PACKAGE}"
-  then
-    echo "WARNING: ${PACKAGE} isn't installed"
-  fi
+  apt-get purge --yes --allow-remove-essential "${PACKAGE}"
 done
