@@ -9,6 +9,7 @@ readonly FULLNAME="${LIVE_USER_FULLNAME:?missing user full name}"
 
 adduser --disabled-password --gecos "$FULLNAME" --uid 1000 "$USER"
 echo "$USER:mame-live" | chpasswd
+usermod --password '*' root
 
 [ -d "/home/$USER" ] && chown "$USER:$USER" "/home/$USER" || true
 for group in $(echo "$LIVE_USER_DEFAULT_GROUPS" | sed -e 's|,| |g'); do
@@ -16,3 +17,5 @@ for group in $(echo "$LIVE_USER_DEFAULT_GROUPS" | sed -e 's|,| |g'); do
   grep -q "^$group:" /etc/group && adduser "$USER" "$group" >/dev/null || true
 done
 [ "$SUDO" != true ] && grep -q '^sudo:' /etc/group && adduser "$USER" sudo >/dev/null || true
+
+[ "$MAME_LIVE_MINIMAL" = true ] && usermod --shell /bin/sh "$USER"

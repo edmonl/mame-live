@@ -78,7 +78,7 @@ live_config_env() {
   chroot_file /etc/live/config.conf.d/user.auto-mame-live.conf << EOF
 LIVE_USERNAME="$USERNAME"
 LIVE_USER_FULLNAME="$USER_FULLNAME"
-LIVE_CONFIG_DEBUG=
+MAME_LIVE_MINIMAL="$MAME_LIVE_MINIMAL"
 EOF
 }
 
@@ -95,7 +95,7 @@ EOF
 }
 
 # Main
-if [ -n "$MINIMAL" ]; then
+if [ "$MAME_LIVE_MINIMAL" = true ]; then
   minimal_chroot_hooks
 else
   extra_tools
