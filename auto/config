@@ -65,7 +65,7 @@ less
 sudo
 rsyslog
 EOF
-  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | chroot_file /etc/sudoers.d/nopwd.auto-mame-live 0440
+  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | chroot_file /etc/sudoers.d/nopwd_auto-mame-live 0440
   echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' | chroot_file /etc/apt/apt.conf.d/00aptitude.auto-mame-live
 }
 
