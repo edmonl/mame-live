@@ -2,13 +2,15 @@
 set -e
 
 # Init
+TZ="${MAME_LIVE_TZ:-$TZ}"
 TZ="${TZ:-$(cat /etc/timezone 2>/dev/null)}"
 TZ="${TZ:+timezone=$TZ}"
-LOCALE="${LOCALE:-$LC_ALL}"
+LOCALE="${MAME_LIVE_LOCALE:-$LC_ALL}"
 LOCALE="${LOCALE:-$LC_LANG}"
 LOCALE="${LOCALE:+locales=$LOCALE}"
-readonly USERNAME="${USERNAME:-user}"
-readonly USER_FULLNAME="${USER_FULLNAME:-M.A.M.E Live user}"
+readonly USERNAME="${MAME_LIVE_USERNAME:-user}"
+readonly USER_FULLNAME="${MAME_LIVE_USER_FULLNAME:-M.A.M.E Live user}"
+readonly HOSTNAME="${MAME_LIVE_HOSTNAME:-mame-live}"
 
 # lb config
 lb config noauto \
@@ -27,7 +29,7 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live "boot=live quiet nosplash noeject components=locales,tzdata,util-linux,hooks hooks=filesystem $TZ $LOCALE" \
+  --bootappend-live "boot=live quiet nosplash noeject ip=frommedia components=locales,tzdata,util-linux,hooks hooks=filesystem $TZ $LOCALE" \
   "${@}"
 
   #--apt-recommends false \
@@ -80,6 +82,18 @@ LIVE_CONFIG_DEBUG=
 EOF
 }
 
+hostname() {
+  echo "$HOSTNAME" | chroot_file /etc/hostname
+  chroot_file /etc/hosts << EOF
+127.0.0.1       localhost $HOSTNAME
+::1             localhost ip6-localhost ip6-loopback
+fe00::0         ip6-localnet
+ff00::0         ip6-mcastprefix
+ff02::1         ip6-allnodes
+ff02::2         ip6-allrouters
+EOF
+}
+
 # Main
 if [ -n "$MINIMAL" ]; then
   minimal_chroot_hooks
@@ -87,3 +101,4 @@ else
   extra_tools
 fi
 live_config_env
+hostname
