@@ -59,6 +59,7 @@ ln_hooks() {
 extra_tools() {
   cat > config/package-lists/extra-tools.auto-mame-live.list.chroot << EOF
 aptitude
+less
 sudo
 rsyslog
 EOF
