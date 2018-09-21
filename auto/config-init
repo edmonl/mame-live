@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+TZ="${MAME_LIVE_TZ:-$TZ}"
+TZ="${TZ:-$(cat /etc/timezone 2>/dev/null)}"
+MININAL="$MAME_LIVE_MINIMAL"
+LOCALE="$MAME_LIVE_LOCALE"
+USERNAME="${MAME_LIVE_USERNAME:-user}"
+USER_FULLNAME="${MAME_LIVE_USER_FULLNAME:-M.A.M.E Live user}"
+HOSTNAME="${MAME_LIVE_HOSTNAME:-mame-live}"

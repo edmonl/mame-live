@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+chroot_file() {
+  local path="${1:?missing chroot path}"
+  local mode="$2"
+  path="config/includes.chroot/${path#/}"
+  mkdir -p "$(dirname "$path")"
+  cat > "$path"
+  if [ -n "$mode" ]; then
+    chmod "$mode" "$path"
+  fi
+}
+
+ln_hooks() {
+  local name="${1:?missing hook name}"
+  local type="${2:?missing hook type}"
+  local priority="${3:?missing hook priority}"
+  local dir="$4"
+  [ -n "$dir" ] && [ "$dir" != "/" ] && dir="${dir%/}/"
+  ln -rs "$dir$name.hook.$type" "config/hooks/normal/$priority-$name.auto-mame-live.hook.$type"
+}

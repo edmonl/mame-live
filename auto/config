@@ -1,16 +1,9 @@
 #!/bin/sh
 set -e
 
-# Init
-TZ="${MAME_LIVE_TZ:-$TZ}"
-TZ="${TZ:-$(cat /etc/timezone 2>/dev/null)}"
-TZ="${TZ:+timezone=$TZ}"
-LOCALE="${MAME_LIVE_LOCALE:-$LC_ALL}"
-LOCALE="${LOCALE:-$LC_LANG}"
-LOCALE="${LOCALE:+locales=$LOCALE}"
-readonly USERNAME="${MAME_LIVE_USERNAME:-user}"
-readonly USER_FULLNAME="${MAME_LIVE_USER_FULLNAME:-M.A.M.E Live user}"
-readonly HOSTNAME="${MAME_LIVE_HOSTNAME:-mame-live}"
+set -o allexport
+. auto/config-init
+set +o allexport
 
 # lb config
 lb config noauto \
@@ -29,76 +22,22 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live "boot=live quiet nosplash noeject ip=frommedia components=locales,tzdata,util-linux,hooks hooks=filesystem $TZ $LOCALE" \
+  --bootappend-live "boot=live quiet nosplash noeject ip=frommedia components=tzdata,util-linux,hooks hooks=filesystem ${TZ:+timezone=$TZ}" \
   "${@}"
 
   #--apt-recommends false \
   #--apt-indices false \
   #--firmware-chroot false \
 
-# Utils
-chroot_file() {
-  local path="${1:?missing chroot path}"
-  local mode="$2"
-  path="config/includes.chroot/${path#/}"
-  mkdir -p "$(dirname "$path")"
-  cat > "$path"
-  if [ -n "$mode" ]; then
-    chmod "$mode" "$path"
-  fi
-}
-
-ln_hooks() {
-  local name="${1:?missing hook name}"
-  local type="${2:?missing hook type}"
-  local priority="${3:?missing hook priority}"
-  local dir="$4"
-  [ -n "$dir" ] && [ "$dir" != "/" ] && dir="${dir%/}/"
-  ln -rs "$dir$name.hook.$type" "config/hooks/normal/$priority-$name.auto-mame-live.hook.$type"
-}
-
-# Extra tasks
-extra_tools() {
-  cat > config/package-lists/extra-tools.auto-mame-live.list.chroot << EOF
-aptitude
-less
-sudo
-rsyslog
-EOF
-  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | chroot_file /etc/sudoers.d/nopwd_auto-mame-live 0440
-  echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' | chroot_file /etc/apt/apt.conf.d/00aptitude.auto-mame-live
-}
-
-minimal_chroot_hooks() {
-  ln_hooks apt-minimal chroot 9975 auto
-  ln_hooks dpkg-minimal chroot 9985 auto
-}
-
-live_config_env() {
-  chroot_file /etc/live/config.conf.d/user.auto-mame-live.conf << EOF
-LIVE_USERNAME="$USERNAME"
-LIVE_USER_FULLNAME="$USER_FULLNAME"
-MAME_LIVE_MINIMAL="$MAME_LIVE_MINIMAL"
-EOF
-}
-
-hostname() {
-  echo "$HOSTNAME" | chroot_file /etc/hostname
-  chroot_file /etc/hosts << EOF
-127.0.0.1       localhost $HOSTNAME
-::1             localhost ip6-localhost ip6-loopback
-fe00::0         ip6-localnet
-ff00::0         ip6-mcastprefix
-ff02::1         ip6-allnodes
-ff02::2         ip6-allrouters
-EOF
-}
+. auto/config-utils
+. auto/config-tasks
 
 # Main
-if [ "$MAME_LIVE_MINIMAL" = true ]; then
+if [ "$MINIMAL" = true ]; then
   minimal_chroot_hooks
 else
   extra_tools
 fi
 live_config_env
 hostname
+locale

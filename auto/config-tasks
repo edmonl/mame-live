@@ -1,0 +1,46 @@
+#!/bin/sh
+set -e
+
+extra_tools() {
+  cat > config/package-lists/extra-tools.auto-mame-live.list.chroot << EOF
+aptitude
+less
+sudo
+rsyslog
+EOF
+  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | chroot_file /etc/sudoers.d/nopwd_auto-mame-live 0440
+  echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' | chroot_file /etc/apt/apt.conf.d/00aptitude.auto-mame-live
+}
+
+minimal_chroot_hooks() {
+  ln_hooks apt-minimal chroot 9975 auto
+  ln_hooks dpkg-minimal chroot 9985 auto
+}
+
+live_config_env() {
+  chroot_file /etc/live/config.conf.d/user.auto-mame-live.conf << EOF
+LIVE_USERNAME='$USERNAME'
+LIVE_USER_FULLNAME='$USER_FULLNAME'
+MAME_LIVE_MINIMAL='$MINIMAL'
+EOF
+}
+
+hostname() {
+  echo "$HOSTNAME" | chroot_file /etc/hostname
+  chroot_file /etc/hosts << EOF
+127.0.0.1       localhost $HOSTNAME
+::1             localhost ip6-localhost ip6-loopback
+fe00::0         ip6-localnet
+ff00::0         ip6-mcastprefix
+ff02::1         ip6-allnodes
+ff02::2         ip6-allrouters
+EOF
+}
+
+locale() {
+  if [ -n "$LOCALE" ]; then
+    echo "LC_ALL='$LOCALE'" | chroot_file /etc/locale.conf
+  else
+    locale | chroot_file /etc/locale.conf
+  fi
+}
