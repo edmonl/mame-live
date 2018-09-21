@@ -16,10 +16,12 @@
 /config/build
 /config/hooks/live/*
 /config/hooks/normal/*
-/config/**/*.auto-mame-live.*
-/config/**/*.auto-mame-live
-!config/**/*.mame-live.*
-!config/**/*.mame-live
+/config/**/*[_.]auto-mame-live[_.]*
+/config/**/*[_.]auto-mame-live
+!config/**/*[_.]mame-live[_.]*
+!config/**/*[_.]mame-live
+/config/includes.chroot/etc/hostname
+/config/includes.chroot/etc/hosts
 
 /source/
 

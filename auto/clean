@@ -7,5 +7,5 @@ rm -f config/binary config/bootstrap config/chroot config/common config/source
 rm -f build.log
 
 rm -f config/includes.chroot/etc/hostname config/includes.chroot/etc/hosts
-find -P config \( -name '*[-_.]auto-mame-live' -o -name '*[-_.]auto-mame-live[-_.]*' -o -type l \) -exec rm -f '{}' '+'
+find -P config \( -name '*[_.]auto-mame-live' -o -name '*[_.]auto-mame-live[_.]*' -o -type l \) -exec rm -f '{}' '+'
 find -P config/includes.*/* -depth -type d -empty -exec rmdir '{}' '+'
