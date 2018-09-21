@@ -27,7 +27,7 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live "boot=live quiet nosplash noeject components=hostname,locales,tzdata,util-linux,hooks hooks=filesystem $TZ $LOCALE" \
+  --bootappend-live "boot=live quiet nosplash noeject components=locales,tzdata,util-linux,hooks hooks=filesystem $TZ $LOCALE" \
   "${@}"
 
   #--apt-recommends false \
