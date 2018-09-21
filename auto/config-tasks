@@ -8,8 +8,8 @@ less
 sudo
 rsyslog
 EOF
-  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | chroot_file /etc/sudoers.d/nopwd_auto-mame-live 0440
-  echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' | chroot_file /etc/apt/apt.conf.d/00aptitude.auto-mame-live
+  echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | chroot_include /etc/sudoers.d/nopwd_auto-mame-live 0440
+  echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' | chroot_include /etc/apt/apt.conf.d/00aptitude.auto-mame-live
 }
 
 minimal_chroot_hooks() {
@@ -18,7 +18,7 @@ minimal_chroot_hooks() {
 }
 
 live_config_env() {
-  chroot_file /etc/live/config.conf.d/user.auto-mame-live.conf << EOF
+  chroot_include /etc/live/config.conf.d/user.auto-mame-live.conf << EOF
 LIVE_USERNAME='$USERNAME'
 LIVE_USER_FULLNAME='$USER_FULLNAME'
 MAME_LIVE_MINIMAL='$MINIMAL'
@@ -26,8 +26,8 @@ EOF
 }
 
 hostname() {
-  echo "$HOSTNAME" | chroot_file /etc/hostname
-  chroot_file /etc/hosts << EOF
+  echo "$HOSTNAME" | chroot_include /etc/hostname
+  chroot_include /etc/hosts << EOF
 127.0.0.1       localhost $HOSTNAME
 ::1             localhost ip6-localhost ip6-loopback
 fe00::0         ip6-localnet
@@ -39,8 +39,8 @@ EOF
 
 locale() {
   if [ -n "$LOCALE" ]; then
-    echo "LC_ALL='$LOCALE'" | chroot_file /etc/locale.conf
+    echo "LC_ALL='$LOCALE'" | chroot_include /etc/locale.conf
   else
-    locale | chroot_file /etc/locale.conf
+    locale | chroot_include /etc/locale.conf
   fi
 }

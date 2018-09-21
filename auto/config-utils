@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-chroot_file() {
+chroot_include() {
   local path="${1:?missing chroot path}"
   local mode="$2"
   path="config/includes.chroot/${path#/}"
