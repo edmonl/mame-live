@@ -31,7 +31,9 @@ lb config noauto \
 
 lib/config hostname
 lib/config locale
-lib/config test
+if [ "$ML_TEST" = true ]; then
+  lib/config test
+fi
 
 . auto/config-tasks
 
