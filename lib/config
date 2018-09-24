@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+ML_LIB="$(dirname "$(readlink -m "$0")")"
+ML_CONFIG_COMPONENT="${1:?missing component}"
+. "$ML_LIB/utils"
+
+component_run() {
+  . "$ML_LIB/$ML_CONFIG_COMPONENT/${1:?missing script}"
+}
+
+run_chroot_includes() {
+  component_run chroot-includes
+}
+
+cd "$ML_LIB/$ML_CONFIG_COMPONENT"
+. config

@@ -1,11 +1,19 @@
 #!/bin/sh
 set -e
 
+set -o allexport
+. auto/conf
+set +o allexport
+
 lb clean noauto "${@}"
 
-rm -f config/binary config/bootstrap config/chroot config/common config/source
+rm -f config/binary config/bootstrap config/chroot config/common config/source config/build
 rm -f build.log
 
-rm -f config/includes.chroot/etc/hostname config/includes.chroot/etc/hosts
-find -P config \( -name '*[_.]auto-mame-live' -o -name '*[_.]auto-mame-live[_.]*' -o -type l \) -exec rm -f '{}' '+'
+rm -rf "config/includes.chroot/$ML_TEST_DIR"
+for file in hostname hosts locale.conf; do
+  rm -f "config/includes.chroot/etc/$file"
+done
+# remove everything under includes.chroot
+find -P config/hooks -type l -exec rm -f '{}' '+'
 find -P config/includes.*/* -depth -type d -empty -exec rmdir '{}' '+'

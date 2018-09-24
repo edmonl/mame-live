@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+readonly TEST_SCRIPT="/$ML_TEST_DIR/run"
+chmod a+x "$TEST_SCRIPT"
+ln -s "$TEST_SCRIPT" "/usr/local/bin/mame-live-test"

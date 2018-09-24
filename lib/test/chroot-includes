@@ -1,0 +1,15 @@
+#!/bin/sh
+_MY_DIR="$PWD"
+cd_chroot_includes
+mkdir -p "$ML_TEST_DIR"
+cd "$ML_TEST_DIR"
+
+env | sed -n '/^ML_\w\+=/p' > conf
+cp "$_MY_DIR/in_chroot/*" .
+for comp in $(ls "$ML_LIB"); do
+  if [ -f "$ML_LIB/$comp/test" ]; then
+    cp "$ML_LIB/$comp/test" "$comp-test"
+  fi
+done
+
+popd

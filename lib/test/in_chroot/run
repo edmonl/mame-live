@@ -1,0 +1,25 @@
+#!/bin/sh
+readonly ML_TEST="$1"
+readonly ML_TEST_DIR="$(dirname "$(readlink -m "$0")")"
+cd "$ML_TEST_DIR"
+if [ -f conf ]; then
+  set -o allexport
+  . conf
+  set +o allexport
+fi
+. asserts
+
+run_test() {
+  locale test_name="${1:?missing test name}"
+  test_name="${test_name%-test}"
+  echo "Test $test_name"
+  . "${test_name}-test"
+}
+
+if [ -n "$ML_TEST" ]; then
+  run_test "$ML_TEST"
+else
+  for test_name in $(ls *-test); do
+    run_test "$test_name"
+  done
+fi

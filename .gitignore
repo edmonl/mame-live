@@ -13,16 +13,5 @@
 /config/common
 /config/source
 /config/control
-/config/build
-/config/hooks/live/*
-/config/hooks/normal/*
-/config/**/*[_.]auto-mame-live[_.]*
-/config/**/*[_.]auto-mame-live
-!config/**/*[_.]mame-live[_.]*
-!config/**/*[_.]mame-live
-/config/includes.chroot/etc/hostname
-/config/includes.chroot/etc/hosts
 
 /source/
-
-/live-image-*

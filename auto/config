@@ -2,7 +2,7 @@
 set -e
 
 set -o allexport
-. auto/config-init
+. auto/conf
 set +o allexport
 
 # lb config
@@ -29,15 +29,17 @@ lb config noauto \
   #--apt-indices false \
   #--firmware-chroot false \
 
-. auto/config-utils
+lib/config hostname
+lib/config locale
+lib/config test
+
 . auto/config-tasks
 
 # Main
+ml_live_config_env
+ml_user
 if [ "$MINIMAL" = true ]; then
-  minimal_chroot_hooks
+  ml_minimal_chroot_hooks
 else
-  extra_tools
+  ml_extra_tools
 fi
-live_config_env
-hostname
-locale

@@ -1,0 +1,3 @@
+#!/bin/sh
+assert hostname "$ML_HOSTNAME" = "$(hostname)"
+assert resolve_hostname getent "$ML_HOSTNAME"
