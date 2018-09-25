@@ -4,7 +4,7 @@ set -e
 for mod in issue time access limits lastlog motd; do
   sed -i '/^[^#].*pam_'$mod'\.so/s/^/# /' /etc/pam.d/*
 done
-for s in $(ls /etc/pam.d/*); do
-  sed -i '/^\s*#/d' "/etc/pam.d/$s"
-  sed -i '/^$/d' "/etc/pam.d/$s"
+for s in $(ls -d /etc/pam.d/*); do
+  sed -i '/^\s*#/d' "$s"
+  sed -i '/^$/d' "$s"
 done

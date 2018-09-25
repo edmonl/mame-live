@@ -19,7 +19,7 @@ run_test() {
 if [ -n "$ML_TEST" ]; then
   run_test "$ML_TEST"
 else
-  for test_name in $(ls *-test); do
+  for test_name in $(ls -d *-test); do
     run_test "$test_name"
   done
 fi
