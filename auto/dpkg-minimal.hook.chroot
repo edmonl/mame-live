@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-apt-get clean
-dpkg --purge apt
-rm -rf /var/log/apt

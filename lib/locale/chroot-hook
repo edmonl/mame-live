@@ -1,11 +1,9 @@
 #!/bin/sh
 set -e
 
-rm /etc/locale.alias /etc/default/locale
-
 if [ -z "$ML_LOCALE" ] ; then
   exit
 fi
 echo "$ML_LOCALE $ML_CHARSET" > /etc/locale.gen
 locale-gen
-rm -f /etc/locale.gen
+rm -f /etc/locale.gen /etc/locale.alias /etc/default/locale

@@ -22,6 +22,7 @@ assert() {
     _assert_passed "$assert_name"
   else
     _assert_failed "$assert_name" "$@"
+  fi
 }
 
 assert_not_exist() {
@@ -30,6 +31,16 @@ assert_not_exist() {
       _assert_msg "Assert failed: path \"$path\" exists but should not"
     else
       _assert_msg "Assert passed: path \"$path\" doesn't exist"
+    fi
+  done
+}
+
+assert_no_packages() {
+  for package in "${@:?missing package}"; do
+    if [ -e "/var/lib/dpkg/info/$package.list" ]; then
+      _assert_msg "Assert failed: package \"$package\" exists but should not"
+    else
+      _assert_msg "Assert passed: package \"$package\" doesn't exist"
     fi
   done
 }

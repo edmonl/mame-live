@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-for PACKAGE in iproute2 rsync sudo sysvinit-utils; do
-  apt-get purge --yes --allow-remove-essential "${PACKAGE}" || true
-done

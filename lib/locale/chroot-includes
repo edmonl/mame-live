@@ -2,7 +2,6 @@
 
 if [ -n "$ML_LOCALE" ]; then
   cd_chroot_includes
-  mkdir -p etc
-  echo "LANG=$ML_LOCALE" > etc/locale.conf
-  popd
-if
+  mk_cd etc
+  echo "LANG=$ML_LOCALE" > locale.conf
+fi

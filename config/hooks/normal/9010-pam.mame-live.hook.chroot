@@ -1,8 +1,0 @@
-#!/bin/sh
-set -e
-
-for mod in issue time access limits lastlog motd; do
-  sed -i '/^[^#].*pam_'$mod'\.so/s/^/# /' /etc/pam.d/login
-done
-
-sed -i '/^[^#].*pam_limits\.so/s/^/# /' /etc/pam.d/su

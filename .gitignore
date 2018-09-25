@@ -2,6 +2,7 @@
 /.build/
 /build.log
 /cache/
+/source/
 
 /chroot/
 /chroot.packages.*
@@ -13,5 +14,3 @@
 /config/common
 /config/source
 /config/control
-
-/source/

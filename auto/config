@@ -2,7 +2,7 @@
 set -e
 
 set -o allexport
-. auto/conf
+. ./auto/conf
 set +o allexport
 
 # lb config
@@ -31,17 +31,10 @@ lb config noauto \
 
 lib/config hostname
 lib/config locale
+lib/config packages
+lib/config pam
+lib/config user
+lib/config clean
 if [ "$ML_TEST" = true ]; then
   lib/config test
-fi
-
-. auto/config-tasks
-
-# Main
-ml_live_config_env
-ml_user
-if [ "$MINIMAL" = true ]; then
-  ml_minimal_chroot_hooks
-else
-  ml_extra_tools
 fi

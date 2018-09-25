@@ -1,0 +1,2 @@
+#!/bin/sh
+assert user "$ML_USERNAME" = "$(whoami)"

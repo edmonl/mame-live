@@ -4,16 +4,16 @@ readonly ML_TEST_DIR="$(dirname "$(readlink -m "$0")")"
 cd "$ML_TEST_DIR"
 if [ -f conf ]; then
   set -o allexport
-  . conf
+  . ./conf
   set +o allexport
 fi
-. asserts
+. ./asserts
 
 run_test() {
   locale test_name="${1:?missing test name}"
   test_name="${test_name%-test}"
   echo "Test $test_name"
-  . "${test_name}-test"
+  . "./${test_name}-test"
 }
 
 if [ -n "$ML_TEST" ]; then

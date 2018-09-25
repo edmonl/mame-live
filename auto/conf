@@ -10,13 +10,17 @@ ML_LOCALE="${MAME_LIVE_LOCALE:-$(locale 2>/dev/null | sed -n 's/^LANG=\(.*\)$/\1
 ML_LOCALE="${ML_LOCALE:-$(locale 2>/dev/null | sed -n 's/^LC_ALL=\(.*\)$/\1/p')}"
 if [ -n "$ML_LOCALE" ]; then
   ML_CHARSET="$(echo "$ML_LOCALE" | cut -d. -f2)"
-  [ -n "$ML_CHARSET" ] || echo "Invalid locale $ML_LOCALE" >&2 ; exit 1
+  if [ -z "$ML_CHARSET" ]; then
+    echo "Invalid locale $ML_LOCALE" >&2
+    exit 1
+  fi
 fi
 
 ML_USERNAME="${MAME_LIVE_USERNAME:-user}"
 ML_USER_FULLNAME="${MAME_LIVE_USER_FULLNAME:-M.A.M.E Live user}"
 ML_USER_GROUPS="${MAME_LIVE_USER_GROUPS:-adm systemd-journal plugdev netdev cdrom floppy tape audio video dip voice powerdev bluetooth}"
 
+ML_INSTALL_PKGS=
 ML_REMOVE_PKGS="keyboard-configuration user-setup"
 
 ML_MININAL="$MAME_LIVE_MINIMAL"
@@ -25,8 +29,9 @@ if [ "$ML_MININAL" = true ]; then
   ML_REMOVE_PKGS="$ML_REMOVE_PKGS iproute2 rsync sysvinit-utils"
 else
   ML_TEST=true
-  ML_INSTALL_PKGS="aptitude less sudo"
+  ML_INSTALL_PKGS="$ML_INSTALL_PKGS aptitude less sudo"
   ML_USER_GROUPS="$ML_USER_GROUPS sudo"
 fi
 
 ML_TEST_DIR=usr/local/lib/mame-live/test
+ML_PAM_MODS=
