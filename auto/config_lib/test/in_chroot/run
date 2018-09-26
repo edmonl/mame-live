@@ -8,13 +8,20 @@ run_test() {
   local test_name="${1:?missing test name}"
   test_name="${test_name%-test}"
   echo "Test $test_name"
+  ML_TEST_FAIL=false
   . "./${test_name}-test"
+  if [ "$?" -ne 0 ] || [ "$ML_TEST_FAIL" = true ]; then
+    ML_FAILED_TESTS="${ML_FAILED_TESTS:+$ML_FAILED_TESTS }$test_name"
+  fi
 }
 
-if [ -n "$1" ]; then
-  run_test "$1"
+ML_TESTS="${@:-$(ls -d *-test)}"
+ML_TOTAL_TESTS=$(echo "$ML_TESTS" | wc -w)
+for test_name in $ML_TESTS; do
+  run_test "$test_name"
+done
+if [ -z "$ML_FAILED_TESTS" ]; then
+  echo "$ML_TOTAL_TESTS out of $ML_TOTAL_TESTS test(s) passed."
 else
-  for test_name in $(ls -d *-test); do
-    run_test "$test_name"
-  done
+  echo "$(echo "$ML_FAILED_TESTS" | wc -w) out of $ML_TOTAL_TESTS test(s) failed: $ML_FAILED_TESTS"
 fi
