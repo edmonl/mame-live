@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -n "$ML_INSTALL_PKGS" ]; then
+  echo "$ML_INSTALL_PKGS" | tr ' ' "\n" > "$ML_CONFIG_DIR/package-lists/mame-live.list.chroot"
+fi
+run_chroot_includes
+ln_chroot_hook 9980

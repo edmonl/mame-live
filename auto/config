@@ -1,9 +1,15 @@
 #!/bin/sh
 set -e
 
-set -o allexport
-. ./auto/conf
-set +o allexport
+. ./auto/init-env
+ML_BUILD_DIR="$PWD"
+ML_CONFIG_DIR="$ML_BUILD_DIR/config"
+ML_CONFIG_CHROOT_INCLUDES="$ML_CONFIG_DIR/includes.chroot"
+mkdir -p "$ML_CONFIG_CHROOT_INCLUDES$ML_LIB_DIR"
+env | sed -n '/^ML_\w\+=/p' > "$ML_CONFIG_CHROOT_INCLUDES$ML_CONF"
+export ML_BUILD_DIR
+export ML_CONFIG_DIR
+export ML_CONFIG_CHROOT_INCLUDES
 
 # lb config
 lb config noauto \
@@ -29,12 +35,13 @@ lb config noauto \
   #--apt-indices false \
   #--firmware-chroot false \
 
-lib/config hostname
-lib/config locale
-lib/config packages
-lib/config pam
-lib/config user
-lib/config clean
-if [ "$ML_TEST" = true ]; then
-  lib/config test
+CONFIG=auto/config-lib/config
+$CONFIG hostname
+$CONFIG locale
+$CONFIG packages
+$CONFIG pam
+$CONFIG user
+$CONFIG clean
+if [ $ML_TEST = true ]; then
+  $CONFIG test
 fi

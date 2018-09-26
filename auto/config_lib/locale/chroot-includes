@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if [ -n "$ML_LOCALE" ]; then
+  mk_cd etc
+  echo "LANG=$ML_LOCALE" > locale.conf
+fi

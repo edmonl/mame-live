@@ -1,0 +1,20 @@
+#!/bin/sh
+. /usr/local/lib/mame-live/conf
+
+cd "$ML_TEST_DIR"
+. ./asserts
+
+run_test() {
+  locale test_name="${1:?missing test name}"
+  test_name="${test_name%-test}"
+  echo "Test $test_name"
+  . "./${test_name}-test"
+}
+
+if [ -n "$1" ]; then
+  run_test "$1"
+else
+  for test_name in $(ls -d *-test); do
+    run_test "$test_name"
+  done
+fi

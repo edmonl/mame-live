@@ -1,8 +1,4 @@
 #!/bin/sh
 set -e
-
-set -o allexport
-. ./auto/conf
-set +o allexport
-
+. ./auto/init-env
 lb build noauto "${@}" 2>&1 | tee build.log

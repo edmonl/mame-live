@@ -1,0 +1,2 @@
+#!/bin/sh
+assert_no_packages $ML_REMOVE_PKGS apt

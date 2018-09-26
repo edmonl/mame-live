@@ -1,0 +1,14 @@
+#!/bin/sh
+
+mk_cd() {
+  local path="${1:?missing path}"
+  mkdir -p "$path"
+  cd "$path"
+}
+
+ln_chroot_hook() {
+  local priority="${1:-8000}"
+  local path="${2:-chroot-hook}"
+  local name="${3:-$ML_AUTO_CONF_COMPONENT}"
+  ln -sf "$ML_AUTO_CONF_COMPONENT_DIR/${path#/}" "$ML_CONFIG_DIR/hooks/normal/$priority${name:+-$name}.mame-live.hook.chroot"
+}

@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+. /usr/local/lib/mame-live/conf
+
+[ "$ML_MINIMAL" = true ] && SHELL_OPT="--shell /bin/sh"
+adduser --disabled-password --gecos "$ML_USER_FULLNAME" --uid 1000 $SHELL_OPT "$ML_USERNAME"
+echo "$ML_USERNAME:mame-live" | chpasswd
+usermod --password '*' root
+
+for group in $ML_USER_GROUPS; do
+  if grep -q "^$group:" /etc/group; then
+    adduser "$ML_USERNAME" "$group"
+  fi
+done
