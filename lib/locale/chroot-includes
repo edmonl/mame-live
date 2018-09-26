@@ -1,7 +1,0 @@
-#!/bin/sh
-
-if [ -n "$ML_LOCALE" ]; then
-  cd_chroot_includes
-  mk_cd etc
-  echo "LANG=$ML_LOCALE" > locale.conf
-fi

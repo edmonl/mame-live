@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-find . -name '*~' -delete
-rm -rf /var/cache/* /var/log/*
-rm -rf /tmp/*

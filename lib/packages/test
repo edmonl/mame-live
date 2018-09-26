@@ -1,2 +1,0 @@
-#!/bin/sh
-assert_not_exist "$ML_INSTALL_PKGS apt"
