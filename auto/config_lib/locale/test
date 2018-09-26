@@ -1,3 +1,3 @@
 #!/bin/sh
-assert locale "$ML_LOCALE" = "$LANG"
+assert locale [ "$ML_LOCALE" = "$LANG" ]
 assert_not_exist /etc/locale.alias /etc/locale.gen /etc/default/locale
