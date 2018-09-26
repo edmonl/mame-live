@@ -15,4 +15,3 @@ for package in $(dpkg --get-selections | grep '\bdeinstall\b' | cut -f1); do
 done
 
 apt-get clean
-dpkg --purge apt
