@@ -35,7 +35,7 @@ lb config noauto \
   #--apt-indices false \
   #--firmware-chroot false \
 
-CONFIG=auto/config-lib/config
+CONFIG=auto/config_lib/config
 $CONFIG hostname
 $CONFIG locale
 $CONFIG packages
