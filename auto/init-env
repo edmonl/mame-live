@@ -29,7 +29,7 @@ if [ "$ML_MININAL" = true ]; then
   ML_REMOVE_PKGS="$ML_REMOVE_PKGS iproute2 rsync sysvinit-utils"
 else
   ML_TEST=true
-  ML_INSTALL_PKGS="$ML_INSTALL_PKGS aptitude less sudo"
+  ML_INSTALL_PKGS="${ML_INSTALL_PKGS% } aptitude less sudo"
   ML_USER_GROUPS="$ML_USER_GROUPS sudo"
 fi
 
