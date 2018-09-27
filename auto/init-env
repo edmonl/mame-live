@@ -6,22 +6,16 @@ export ML_TZ="${MAME_LIVE_TZ:-$TZ}"
 ML_TZ="${ML_TZ:-$(cat /etc/timezone 2>/dev/null)}"
 ML_TZ="${ML_TZ:-$(readlink /etc/localtime 2>/dev/null | sed 's|^/usr/share/zoneinfo/||')}"
 
-export ML_LOCALE="${MAME_LIVE_LOCALE:-$(locale 2>/dev/null | sed -n 's/^LANG=\(.*\)$/\1/p')}"
-ML_LOCALE="${ML_LOCALE:-$(locale 2>/dev/null | sed -n 's/^LC_ALL=\(.*\)$/\1/p')}"
-if [ -n "$ML_LOCALE" ]; then
-  export ML_CHARSET="$(echo "$ML_LOCALE" | cut -d. -f2)"
-  if [ -z "$ML_CHARSET" ]; then
-    echo "Invalid locale $ML_LOCALE" >&2
-    exit 1
-  fi
-fi
+export ML_LOCALE="${MAME_LIVE_LOCALE:-$LC_ALL}"
+ML_LOCALE="${ML_LOCALE:-$LANG}"
+export ML_CHARSET="$(echo "$ML_LOCALE" | cut -d. -f2)"
 
 export ML_USERNAME="${MAME_LIVE_USERNAME:-user}"
 export ML_USER_FULLNAME="${MAME_LIVE_USER_FULLNAME:-M.A.M.E Live user}"
 export ML_USER_GROUPS="${MAME_LIVE_USER_GROUPS:-adm systemd-journal plugdev netdev cdrom floppy tape audio video dip voice powerdev bluetooth}"
 
 export ML_INSTALL_PKGS=
-export ML_REMOVE_PKGS="keyboard-configuration user-setup"
+export ML_REMOVE_PKGS="keyboard-configuration user-setup libpam-cap"
 
 export ML_MININAL="$MAME_LIVE_MINIMAL"
 export ML_TEST="$MAME_LIVE_TEST"

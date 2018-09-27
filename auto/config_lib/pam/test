@@ -1,2 +1,2 @@
 #!/bin/sh
-assert_not_exist /etc/pam.conf
+assert_not_exist /etc/pam.conf /etc/environment /etc/default/locale

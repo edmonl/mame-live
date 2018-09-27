@@ -2,10 +2,13 @@
 set -e
 . /usr/local/lib/mame-live/conf
 if [ -z "$ML_LOCALE" ] ; then
+  apt-get purge --yes locales || true
   exit
+else
+  mkdir /etc
+  echo "$ML_LOCALE${ML_CHARSET:+ $ML_CHARSET}" > /etc/locale.gen
+  locale-gen
+  apt-get install --yes localepurge
+  apt-get purge --yes localepurge
 fi
-
-mkdir -p /etc
-echo "$ML_LOCALE $ML_CHARSET" > /etc/locale.gen
-locale-gen
-rm -f /etc/locale.gen /etc/locale.alias /etc/default/locale
+rm -f /etc/locale.gen /etc/locale.alias
