@@ -2,6 +2,7 @@
 set -e
 . /usr/local/lib/mame-live/conf
 
+rm -f /etc/pam.conf
 for mod in issue time access limits lastlog motd; do
   sed -i '/^[^#].*pam_'$mod'\.so/s/^/# /' /etc/pam.d/*
 done
