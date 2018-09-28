@@ -4,6 +4,9 @@ readonly ML_AUTO_CONF_LIB="$(dirname "$(readlink -m "$0")")"
 readonly ML_AUTO_CONF_COMPONENT="${1:?missing component}"
 readonly ML_AUTO_CONF_COMPONENT_DIR="$ML_AUTO_CONF_LIB/$ML_AUTO_CONF_COMPONENT"
 . "$ML_AUTO_CONF_LIB/utils"
+. "$ML_AUTO_CONF_LIB/lib-utils"
+mk_cd "$ML_CONFIG_CHROOT_INCLUDES$ML_LIB_DIR"
+cp "$ML_AUTO_CONF_LIB/lib-utils" .
 
 run_chroot_includes() {
   cd "$ML_CONFIG_CHROOT_INCLUDES"

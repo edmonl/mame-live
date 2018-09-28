@@ -1,7 +1,4 @@
 #!/bin/sh
 assert locale [ "$ML_LOCALE" = "$LANG" ]
-assert_not_exist /etc/locale.alias /etc/locale.gen
-assert_no_packages localepurge
-if [ -z "$ML_LOCALE" ]; then
-  assert_no_packages locales
-fi
+assert_not_exist /etc/locale.alias /etc/locale.gen /usr/share/i18n
+assert_no_packages locales

@@ -2,8 +2,8 @@
 set -e
 . /usr/local/lib/mame-live/conf
 
-[ "$ML_MINIMAL" = true ] && SHELL_OPT="--shell /bin/sh"
-adduser --disabled-password --gecos "$ML_USER_FULLNAME" --uid 1000 $SHELL_OPT "$ML_USERNAME"
+ML_SHELL_OPT="${ML_SHELL:+--shell $ML_SHELL}"
+adduser --disabled-password --gecos "$ML_USER_FULLNAME" --uid 1000 $ML_SHELL_OPT "$ML_USERNAME"
 echo "$ML_USERNAME:mame-live" | chpasswd
 usermod --password '*' root
 

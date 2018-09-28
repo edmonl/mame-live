@@ -1,0 +1,31 @@
+#!/bin/sh
+
+compact_text() {
+  for f in "$@"; do
+    sed -i '/^$/d' "$f"
+    sed -i 's/^\s\+//' "$f"
+  done
+}
+
+join_in_string() {
+  local input="$1"
+  local delim="$2"
+  local prefix="$3"
+  local suffix="$4"
+  local result
+  for s in $input; do
+    if [ -n "$s" ]; then
+      result="${result:+$result$delim}$prefix$s$suffix"
+    fi
+  done
+  echo "$result"
+}
+
+contains() {
+  for s in $1; do
+    if [ "$s" = "$2" ]; then
+      return 0
+    fi
+  done
+  return 1
+}

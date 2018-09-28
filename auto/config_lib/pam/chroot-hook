@@ -1,15 +1,50 @@
 #!/bin/sh
 set -e
 . /usr/local/lib/mame-live/conf
+. "$ML_LIB_DIR/lib-utils"
+
+rm_when_no_mod() {
+  local mod="${1:?missing module}"
+  shift
+  if ! contains "$ML_PAM_MODS" "$mod"; then
+    rm -rf "$@"
+  fi
+}
 
 rm -f /etc/pam.conf
-for mod in issue time access limits lastlog motd env; do
-  sed -i '/^[^#].*pam_'$mod'\.so/s/^/# /' /etc/pam.d/*
-done
-for s in $(ls -d /etc/pam.d/*); do
+ML_PAM_D=$(ls -d /etc/pam.d/*)
+for s in $ML_PAM_D; do
   sed -i '/^\s*#/d' "$s"
-  sed -i '/^$/d' "$s"
 done
+compact_text $ML_PAM_D
 
-#env
-rm -f /etc/environment /etc/default/locale
+if [ -n "$ML_PAM_MODS" ]; then
+  # remove lines in conf files
+  ML_PAM_MODS_PATTERN='\(\bpam_\('"$(join_in_string "$ML_PAM_MODS" '\|')"'\)\.so\b\)\|^@include\b\|^\w\+\s\+include\b'
+  for s in $ML_PAM_D; do
+    if grep "$ML_PAM_MODS_PATTERN" "$s" > "$s.tmp"; then
+      mv -f "$s.tmp" "$s"
+    else
+      rm -f "$s.tmp" "$s"
+    fi
+  done
+  ML_PAM_MODS="$(sed -n 's/.*\bpam_\(\w\+\)\.so\b.*/\1/p' /etc/pam.d/* | sort | uniq)"
+  ML_PAM_MODS_PATTERN="$(join_in_string "${ML_PAM_MODS:?all PAM modules are disabled}" '\|')"
+
+  # remove *.so
+  ML_PAM_MODS_PATHS="$(ls -d1 /lib*/security/pam_*.so /lib*/*/security/pam_*.so 2>/dev/null | grep -v '\/pam_\('"$ML_PAM_MODS_PATTERN"'\)\.so$')"
+  rm -f $ML_PAM_MODS_PATHS
+
+  # remove conf
+  ML_PAM_MODS_PATHS="$(ls -d1 /etc/security/* | grep -v '\/\(pam_\)\?\('"$ML_PAM_MODS_PATTERN"'\)\(\.\w\+\)\?$')"
+  rm -rf $ML_PAM_MODS_PATHS
+
+  find /etc/security/ -type d -empty -delete
+
+  rm_when_no_mod env /etc/environment /etc/default/locale
+  rm_when_no_mod securetty /etc/securetty
+  rm_when_no_mod shells /etc/shells
+  rm_when_no_mod issue /etc/issue /etc/issue.net
+  rm_when_no_mod lastlog /var/log/lastlog
+  rm_when_no_mod motd /etc/motd
+fi

@@ -21,13 +21,12 @@ export ML_MININAL="$MAME_LIVE_MINIMAL"
 export ML_TEST="$MAME_LIVE_TEST"
 if [ "$ML_MININAL" = true ]; then
   ML_REMOVE_PKGS="$ML_REMOVE_PKGS iproute2 rsync sysvinit-utils"
+  ML_SHELL=/bin/sh
 else
   ML_TEST=true
   ML_INSTALL_PKGS="${ML_INSTALL_PKGS:+$ML_INSTALL_PKGS }aptitude less sudo"
   ML_USER_GROUPS="$ML_USER_GROUPS sudo"
 fi
 
-export ML_PAM_MODS=
+export ML_PAM_MODS='deny keyinit loginuid permit rootok selinux systemd unix'
 export ML_LIB_DIR=/usr/local/lib/mame-live
-export ML_CONF="$ML_LIB_DIR/conf"
-export ML_TEST_DIR="$ML_LIB_DIR/test"

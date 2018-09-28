@@ -1,5 +1,5 @@
 #!/bin/sh
-mk_cd "${ML_TEST_DIR#/}"
+mk_cd "${ML_LIB_DIR#/}/test"
 cp "$ML_AUTO_CONF_COMPONENT_DIR"/in_chroot/* .
 for comp in $(ls "$ML_AUTO_CONF_LIB"); do
   if [ -f "$ML_AUTO_CONF_LIB/$comp/test" ]; then

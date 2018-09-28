@@ -1,13 +1,11 @@
 #!/bin/sh
 
-for package in $ML_INSTALL_PKGS; do
-  if [ "$package" = sudo ]; then
-    ML_SUDO=true
-  fi
-  if [ "$package" = aptitude ]; then
-    ML_APTITUDE=true
-  fi
-done
+if contains "$ML_INSTALL_PKGS" sudo; then
+  ML_SUDO=true
+fi
+if contains "$ML_INSTALL_PKGS" aptitude; then
+  ML_APTITUDE=true
+fi
 if [ "$ML_SUDO" = true ]; then
   mk_cd etc/sudoers.d
   rm -rf nopwd-mame-live

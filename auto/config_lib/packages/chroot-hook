@@ -2,9 +2,6 @@
 set -e
 . /usr/local/lib/mame-live/conf
 
-apt-get install --yes localepurge
-apt-get purge --yes localepurge
-
 for package in $ML_REMOVE_PKGS; do
   apt-get purge --yes --allow-remove-essential "$package" || true
 done

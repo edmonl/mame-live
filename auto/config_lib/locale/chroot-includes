@@ -3,4 +3,6 @@
 if [ -n "$ML_LOCALE" ]; then
   mk_cd etc
   echo "LANG=$ML_LOCALE" > locale.conf
+  mk_cd profile.d
+  echo "export LANG=$ML_LOCALE" > locale.sh
 fi

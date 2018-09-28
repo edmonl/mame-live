@@ -1,6 +1,13 @@
 #!/bin/sh
 set -e
+. /usr/local/lib/mame-live/conf
+
+rm -f /etc/security/opasswd
 
 find . -name '*~' -delete
 rm -rf /var/cache/* /var/log/*
 rm -rf /tmp/*
+if [ "$ML_TEST" != true ]; then
+  rm -rf "$ML_LIB_DIR"
+  rmdir -p --ignore-fail-on-non-empty "$(dirname "$ML_LIB_DIR")"
+fi
