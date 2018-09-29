@@ -42,3 +42,10 @@ assert_no_packages() {
     fi
   done
 }
+
+assert_compact_conf() {
+  if grep -q '#\|^\s*$\|^\s\+\|\s\+$' "$@"; then
+    _assert_fail " not compact: $@"
+  else
+    _assert_pass " compact: $@"
+}

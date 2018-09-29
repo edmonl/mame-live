@@ -12,16 +12,12 @@ rm_when_no_mod() {
 }
 
 rm -f /etc/pam.conf
-ML_PAM_D=$(ls -d /etc/pam.d/*)
-for s in $ML_PAM_D; do
-  sed -i '/^\s*#/d' "$s"
-done
-compact_text $ML_PAM_D
+compact_conf $(ls -d /etc/pam.d/*)
 
 if [ -n "$ML_PAM_MODS" ]; then
   # remove lines in conf files
   ML_PAM_MODS_PATTERN='\(\bpam_\('"$(join_in_string "$ML_PAM_MODS" '\|')"'\)\.so\b\)\|^@include\b\|^\w\+\s\+include\b'
-  for s in $ML_PAM_D; do
+  for s in $(ls -d /etc/pam.d/*); do
     if grep "$ML_PAM_MODS_PATTERN" "$s" > "$s.tmp"; then
       mv -f "$s.tmp" "$s"
     else

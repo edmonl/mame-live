@@ -1,9 +1,10 @@
 #!/bin/sh
 
-compact_text() {
+compact_conf() {
   for f in "$@"; do
-    sed -i '/^$/d' "$f"
-    sed -i 's/^\s\+//' "$f"
+    sed -i 's/#.*$//' "$f"
+    sed -i '/^\s*$/d' "$f"
+    sed -i 's/^\s\+\|\s\+$//g' "$f"
   done
 }
 
