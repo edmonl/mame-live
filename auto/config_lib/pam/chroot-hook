@@ -6,18 +6,18 @@ set -e
 rm_when_no_mod() {
   local mod="${1:?missing module}"
   shift
-  if ! contains "$ML_PAM_MODS" "$mod"; then
+  if ! contains_words "$ML_PAM_MODS" "$mod"; then
     rm -rf "$@"
   fi
 }
 
 rm -f /etc/pam.conf
-compact_conf $(ls -d /etc/pam.d/*)
+compact_conf /etc/pam.d/*
 
 if [ -n "$ML_PAM_MODS" ]; then
   # remove lines in conf files
-  ML_PAM_MODS_PATTERN='\(\bpam_\('"$(join_in_string "$ML_PAM_MODS" '\|')"'\)\.so\b\)\|^@include\b\|^\w\+\s\+include\b'
-  for s in $(ls -d /etc/pam.d/*); do
+  ML_PAM_MODS_PATTERN='\(\bpam_\('"$(join_words "$ML_PAM_MODS" '\|')"'\)\.so\b\)\|^@include\b\|^\w\+\s\+include\b'
+  for s in /etc/pam.d/*; do
     if grep "$ML_PAM_MODS_PATTERN" "$s" > "$s.tmp"; then
       mv -f "$s.tmp" "$s"
     else
@@ -25,7 +25,7 @@ if [ -n "$ML_PAM_MODS" ]; then
     fi
   done
   ML_PAM_MODS="$(sed -n 's/.*\bpam_\(\w\+\)\.so\b.*/\1/p' /etc/pam.d/* | sort | uniq)"
-  ML_PAM_MODS_PATTERN="$(join_in_string "${ML_PAM_MODS:?all PAM modules are disabled}" '\|')"
+  ML_PAM_MODS_PATTERN="$(join_words "${ML_PAM_MODS:?all PAM modules are disabled}" '\|')"
 
   # remove *.so
   ML_PAM_MODS_PATHS="$(ls -d1 /lib*/security/pam_*.so /lib*/*/security/pam_*.so 2>/dev/null | grep -v '\/pam_\('"$ML_PAM_MODS_PATTERN"'\)\.so$')"

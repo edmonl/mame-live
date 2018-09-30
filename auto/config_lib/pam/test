@@ -2,6 +2,6 @@
 assert_not_exist /etc/pam.conf
 assert_compact_conf /etc/pam.d/*
 
-if ! contains "$ML_PAM_MODS" env; then
+if ! contains_words "$ML_PAM_MODS" env; then
   assert_not_exist /etc/environment /etc/default/locale
 fi

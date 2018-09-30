@@ -1,9 +1,9 @@
 #!/bin/sh
 
-if contains "$ML_INSTALL_PKGS" sudo; then
+if contains_words "$ML_INSTALL_PKGS" sudo; then
   ML_SUDO=true
 fi
-if contains "$ML_INSTALL_PKGS" aptitude; then
+if contains_words "$ML_INSTALL_PKGS" aptitude; then
   ML_APTITUDE=true
 fi
 if [ "$ML_SUDO" = true ]; then
