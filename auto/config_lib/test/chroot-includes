@@ -3,6 +3,6 @@ mk_cd "${ML_LIB_DIR#/}/test"
 cp "$ML_AUTO_CONF_COMPONENT_DIR"/in_chroot/* .
 for comp in "$ML_AUTO_CONF_LIB"/*; do
   if [ -f "$comp/test" ]; then
-    cp "$comp/test" "$comp-test"
+    cp "$comp/test" "$(basename "$comp")-test"
   fi
 done
