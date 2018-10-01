@@ -2,6 +2,27 @@
 assert_not_exist /etc/pam.conf
 assert_compact_conf /etc/pam.d/*
 
-if ! contains_words "$ML_PAM_MODS" env; then
+ML_ACTUAL_PAM_MODS="$(sed -n 's/.*\bpam_\(\w\+\)\.so\b.*/\1/p' /etc/pam.d/* | sort | uniq)"
+assert 'modules in pam.d' contains_words "$ML_PAM_MODS" "$ML_ACTUAL_PAM_MODS"
+assert 'module files' [ "$ML_ACTUAL_PAM_MODS" = "$(ls -d1 /lib*/security/pam_*.so /lib*/*/security/pam_*.so 2>/dev/null | sed 's#.*/pam_\(\w\+\)\.so$#\1#')" ]
+assert 'module confs' contains_words "$ML_ACTUAL_PAM_MODS" "$(ls -d1 /etc/security/* 2>/dev/null | sed 's#.*/\(pam_\)\?\(\w\+\)\(\.\w\+\)\?$#\2#')"
+assert 'no empty module conf dirs' [ -z "$(find /etc/security/ -type d -empty 2>/dev/null)" ]
+
+if ! contains_words "$ML_ACTUAL_PAM_MODS" env; then
   assert_not_exist /etc/environment /etc/default/locale
+fi
+if ! contains_words "$ML_ACTUAL_PAM_MODS" securetty; then
+  assert_not_exist /etc/securetty
+fi
+if ! contains_words "$ML_ACTUAL_PAM_MODS" shells; then
+  assert_not_exist /etc/shells
+fi
+if ! contains_words "$ML_ACTUAL_PAM_MODS" issue; then
+  assert_not_exist /etc/issue /etc/issue.net
+fi
+if ! contains_words "$ML_ACTUAL_PAM_MODS" lastlog; then
+  assert_not_exist /var/log/lastlog
+fi
+if ! contains_words "$ML_ACTUAL_PAM_MODS" motd; then
+  assert_not_exist /etc/motd
 fi

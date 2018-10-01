@@ -5,11 +5,11 @@ _assert_msg() {
 }
 
 _assert_pass() {
-  _assert_msg "\e[92mPASS\e[39m$@"
+  _assert_msg "\e[92mPASS\e[0m$@"
 }
 
 _assert_fail() {
-  _assert_msg "\e[91mFAIL\e[39m$@"
+  _assert_msg "\e[91mFAIL\e[0m$@"
   ML_TEST_FAIL=true
 }
 

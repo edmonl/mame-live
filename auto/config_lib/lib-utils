@@ -27,6 +27,9 @@ contains_words() {
   shift
   local words="$@"
   words="$(join_words "$words" '\n' | sort | uniq)"
+  if [ -z "$words" ]; then
+    return 0
+  fi
   local pattern="$(join_words "$words" '\|')"
   [ "$(echo "$s" | grep -o '\b\('"$pattern"'\)\b' | sort | uniq)" = "$words" ]
 }

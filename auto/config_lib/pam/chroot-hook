@@ -32,7 +32,7 @@ if [ -n "$ML_PAM_MODS" ]; then
   rm -f $ML_PAM_MODS_PATHS
 
   # remove conf
-  ML_PAM_MODS_PATHS="$(ls -d1 /etc/security/* | grep -v '\/\(pam_\)\?\('"$ML_PAM_MODS_PATTERN"'\)\(\.\w\+\)\?$')"
+  ML_PAM_MODS_PATHS="$(ls -d1 /etc/security/* 2>/dev/null | grep -v '\/\(pam_\)\?\('"$ML_PAM_MODS_PATTERN"'\)\(\.\w\+\)\?$')"
   rm -rf $ML_PAM_MODS_PATHS
 
   find /etc/security/ -type d -empty -delete

@@ -21,7 +21,7 @@ for test_name in $ML_TESTS; do
   run_test "$test_name"
 done
 if [ -z "$ML_FAILED_TESTS" ]; then
-  echo "\e[92m$ML_TOTAL_TESTS out of $ML_TOTAL_TESTS test(s) passed.\e[39m"
+  echo "\e[92m$ML_TOTAL_TESTS out of $ML_TOTAL_TESTS test(s) passed.\e[0m"
 else
-  echo "\e[91m$(echo "$ML_FAILED_TESTS" | wc -w) out of $ML_TOTAL_TESTS test(s) failed: $ML_FAILED_TESTS\e[39m"
+  echo "\e[91m$(echo "$ML_FAILED_TESTS" | wc -w) out of $ML_TOTAL_TESTS test(s) failed: $ML_FAILED_TESTS\e[0m"
 fi
