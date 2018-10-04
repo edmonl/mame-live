@@ -25,7 +25,7 @@ assert() {
 
 assert_not_exist() {
   for path in "${@:?missing path}"; do
-    if [ -e "$path" ]; then
+    if [ -e "$path" ] && [ -h "$path" ]; then
       _assert_fail ": path \"$path\" exists but should not"
     else
       _assert_pass ": path \"$path\" doesn't exist"

@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+systemctl disable systemd-timesyncd.service
+rm -rf /lib/systemd/systemd-timesyncd /lib/systemd/system/systemd-timesyncd.service* /etc/systemd/timesyncd.conf
+
+systemctl disable time-sync.target
+rm -f /lib/systemd/system/time-sync.target
+
+systemctl disable systemd-timedated.service
+rm -f /usr/bin/timedatectl /lib/systemd/systemd-timedated /lib/systemd/system/systemd-timedated.service /lib/systemd/system/dbus-org.freedesktop.timedate*.service
+
+systemctl disable systemd-time-wait-sync.service
+rm -f /lib/systemd/systemd-time-wait-sync /lib/systemd/system/systemd-time-wait-sync.service
