@@ -12,3 +12,9 @@ rm -f /usr/bin/timedatectl /lib/systemd/systemd-timedated /lib/systemd/system/sy
 
 systemctl disable systemd-time-wait-sync.service
 rm -f /lib/systemd/systemd-time-wait-sync /lib/systemd/system/systemd-time-wait-sync.service
+
+systemctl disable apt-daily-upgrade.timer
+systemctl disable apt-daily-upgrade.service
+systemctl disable apt-daily.timer
+systemctl disable apt-daily.service
+rm -rf /lib/systemd/system/apt-*

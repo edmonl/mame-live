@@ -3,3 +3,4 @@ assert_not_exist /lib/systemd/systemd-timesyncd /lib/systemd/system/systemd-time
 assert_not_exist /lib/systemd/system/time-sync.target
 assert_not_exist /usr/bin/timedatectl /lib/systemd/systemd-timedated /lib/systemd/system/systemd-timedated.service /lib/systemd/system/dbus-org.freedesktop.timedate*.service
 assert_not_exist /lib/systemd/systemd-time-wait-sync /lib/systemd/system/systemd-time-wait-sync.service
+assert_not_exist /lib/systemd/system/apt-*

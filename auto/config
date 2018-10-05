@@ -41,7 +41,7 @@ $CONFIG locale
 $CONFIG packages
 $CONFIG pam
 $CONFIG user
-$CONFIG timesync
+$CONFIG systemd
 $CONFIG clean
 if [ $ML_TEST = true ]; then
   $CONFIG test
