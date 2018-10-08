@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+systemctl set-default multi-user.target
+rm -f /lib/systemd/system/graphical.target
+
 systemctl disable systemd-timesyncd.service
 rm -rf /lib/systemd/systemd-timesyncd /lib/systemd/system/systemd-timesyncd.service* /etc/systemd/timesyncd.conf
 
