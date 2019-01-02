@@ -15,7 +15,7 @@ export ML_USER_FULLNAME="${MAME_LIVE_USER_FULLNAME:-M.A.M.E Live user}"
 export ML_USER_GROUPS="${MAME_LIVE_USER_GROUPS:-adm systemd-journal plugdev netdev cdrom floppy tape audio video dip voice powerdev bluetooth}"
 
 export ML_INSTALL_PKGS='mame'
-export ML_REMOVE_PKGS=keyboard-configuration user-setup libpam-cap'
+export ML_REMOVE_PKGS='keyboard-configuration user-setup libpam-cap'
 
 export ML_MININAL="$MAME_LIVE_MINIMAL"
 export ML_TEST="$MAME_LIVE_TEST"

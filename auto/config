@@ -28,7 +28,7 @@ lb config noauto \
   --win32-loader false \
   --bootloaders grub-efi \
   --debootstrap-options '--variant=minbase' \
-  --bootappend-live "boot=live quiet nosplash noeject ip=frommedia components=tzdata,util-linux${TZ:+ timezone=$TZ}" \
+  --bootappend-live "boot=live quiet nosplash noeject ip=frommedia components=tzdata${TZ:+ timezone=$TZ}" \
   "${@}"
 
   #--apt-recommends false \
